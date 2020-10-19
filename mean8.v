@@ -1,9 +1,10 @@
+// num_inputs = 8;
 
-module mean_avg
-#(parameter WID = 16)
-(
-    input clk,
-    input rst,
+
+module mean8
+#(parameter WID = 16) (
+    input  clk,
+    input  rst,
     input  [WID-1:0] in_000,
     input  [WID-1:0] in_001,
     input  [WID-1:0] in_002,
@@ -12,7 +13,7 @@ module mean_avg
     input  [WID-1:0] in_005,
     input  [WID-1:0] in_006,
     input  [WID-1:0] in_007,
-    output [WID-1:0] o_mean
+    output reg [WID-1:0] o_mean
 );
 
     // Stage 2 of 4
@@ -25,9 +26,11 @@ module mean_avg
     reg  [WID+1:0] stage_02_001;
     // Stage 4 of 4
     reg  [WID+2:0] stage_03_000;
-    reg  [WID-1:0] o_mean;
 
-    always@(posedge clk or posedge rst) begin
+// begin module
+
+    always@(posedge clk or posedge rst)
+    begin
         if (rst) begin
             // Stage 2 of 4
             stage_01_000 <= 'h0;
@@ -40,8 +43,7 @@ module mean_avg
             // Stage 4 of 4
             stage_03_000 <= 'h0;
             o_mean       <= 'h0;
-        end
-        else begin
+        end else begin // posedge clk
             // Stage 2 of 4
             stage_01_000 <= in_000 + in_001;
             stage_01_001 <= in_002 + in_003;
@@ -52,8 +54,8 @@ module mean_avg
             stage_02_001 <= stage_01_002 + stage_01_003;
             // Stage 4 of 4
             stage_03_000 <= stage_02_000 + stage_02_001;
-            o_mean       <= stage_03_000[WID+3:3];
-        end
-    end
+            o_mean       <= stage_03_000 [WID+3:3];
+        end // else
+    end // always
 endmodule
 

@@ -9,7 +9,7 @@ reg [WID-1:0] in_array[0:NUM_INPUTS-1];
 
 reg test_done;
 
-mean_avg u_mean_avg(
+mean128 u_mean128(
     .clk     (clk),
     .rst     (rst),
     .in_000  (in_array[0]),

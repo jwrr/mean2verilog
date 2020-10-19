@@ -16,7 +16,7 @@ reg [WID-1:0] in_007;
 
 reg test_done;
 
-mean_avg u_mean_avg(
+mean8 u_mean8(
     .clk     (clk),
     .rst     (rst),
     .in_000  (in_000),
