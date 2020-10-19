@@ -2,15 +2,10 @@
 
 import sys
 
-# print ('Num args:', len(sys.argv), 'arguments.')
-# print ('Args:', str(sys.argv))
-
-
 # ==============================================================================
 
 class MeanTree:
     "Generate one mean average per clock."
-    var1 = 42
 
     def __init__(self, num_inputs, signal_width):
         "Constructor"
@@ -32,8 +27,8 @@ class MeanTree:
             module mean_avg
             #(parameter WID = {})
             (
-                input clk,
-                input rst,\n""".format(self.signal_width)
+                input  clk,
+                input  rst,\n""".format(self.signal_width)
 
         for i in range(self.num_inputs):
             i_str = str(i).rjust(3, '0')
@@ -94,7 +89,16 @@ class MeanTree:
 
 # ==============================================================================
 
-mean_avg = MeanTree(8, 16)
+
+# print ('Num args:', len(sys.argv), 'arguments.')
+# print ('Args:', str(sys.argv))
+
+num_inputs = 8;
+if len(sys.argv) > 1:
+    num_inputs = int(sys.argv[1])
+print("// num_inputs = {};\n".format(num_inputs))
+
+mean_avg = MeanTree(num_inputs, 16)
 
 print(mean_avg)
 
