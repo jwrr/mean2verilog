@@ -49,8 +49,7 @@ class MeanTree:
         
 
         verilog += "\n// begin module\n\n"
-        verilog += "                always@(posedge clk or posedge rst)\n"
-        verilog += "                begin\n"
+        verilog += "                always@(posedge clk or posedge rst) begin\n"
         verilog += "                    if (rst) begin\n"
 
         for stage in range(1, num_stages):
@@ -74,8 +73,8 @@ class MeanTree:
                   verilog += "                        stage_{:02d}_{:03d} <= stage_{:02d}_{:03d} + stage_{:02d}_{:03d};\n".format(stage, i, stage-1, 2*i, stage-1, 2*i+1)
         verilog += "                        o_mean       <= stage_{:02d}_{:03d} [WID+{}:{}];\n".format(num_stages-1, 0, num_stages-1, num_stages-1)
         
-        verilog += "                    end // else\n"
-        verilog += "                end // always\n"
+        verilog += "                    end\n"
+        verilog += "                end\n"
         verilog += "            endmodule\n"
 
         

@@ -273,8 +273,7 @@ module mean128
 
 // begin module
 
-    always@(posedge clk or posedge rst)
-    begin
+    always@(posedge clk or posedge rst) begin
         if (rst) begin
             // Stage 2 of 8
             stage_01_000 <= 'h0;
@@ -547,7 +546,7 @@ module mean128
             // Stage 8 of 8
             stage_07_000 <= stage_06_000 + stage_06_001;
             o_mean       <= stage_07_000 [WID+7:7];
-        end // else
-    end // always
+        end
+    end
 endmodule
 

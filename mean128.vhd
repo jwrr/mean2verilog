@@ -283,8 +283,7 @@ architecture arch_name of mean128 is
 
 begin -- architecture
 
-    process(clk, rst)
-    begin
+    process(clk, rst) begin
         if (rst) then
             -- Stage 2 of 8
             stage_01_000 <= (others => '0');
@@ -557,8 +556,8 @@ begin -- architecture
             -- Stage 8 of 8
             stage_07_000 <= stage_06_000 + stage_06_001;
             o_mean       <= stage_07_000 (WID+7 downto 7);
-        end if; -- else
-    end process; -- always
+        end if;
+    end process;
 end architecture arch_name;
 
 

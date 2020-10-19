@@ -29,8 +29,7 @@ module mean8
 
 // begin module
 
-    always@(posedge clk or posedge rst)
-    begin
+    always@(posedge clk or posedge rst) begin
         if (rst) begin
             // Stage 2 of 4
             stage_01_000 <= 'h0;
@@ -55,7 +54,7 @@ module mean8
             // Stage 4 of 4
             stage_03_000 <= stage_02_000 + stage_02_001;
             o_mean       <= stage_03_000 [WID+3:3];
-        end // else
-    end // always
+        end
+    end
 endmodule
 

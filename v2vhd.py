@@ -7,6 +7,7 @@ class v2vhd:
     "Convert Verilog to VHDL"
 
     vector_type = "unsigned" # "std_logic_vector" 
+    end_stack = []
 
     def __init__(self, v_file, vhdl_file):
         "Constructor"
@@ -21,6 +22,13 @@ class v2vhd:
                 lines.append(line)
         return lines
 
+    def get_indent(self, line):
+        num_leading_spaces = len(line) - len(line.lstrip())
+        indent_str = ""
+        if (num_leading_spaces > 0):
+            indent_str = line[0 : num_leading_spaces]
+        return indent_str
+    
     def read(self):
         self.lines = self.slurp()
 
@@ -51,13 +59,6 @@ class v2vhd:
                 elif "begin module" in line:
                     all_lines[i] = "begin -- architecture\n"
 
-    def get_indent(self, line):
-        num_leading_spaces = len(line) - len(line.lstrip())
-        indent_str = ""
-        if (num_leading_spaces > 0):
-            indent_str = line[0 : num_leading_spaces]
-        return indent_str
-    
     def convert_reg(self, all_lines):
         for i, line in enumerate(all_lines):
             if " reg " in line:
@@ -123,7 +124,7 @@ class v2vhd:
                 all_lines[i] = all_lines[i].replace(") (", ");\nport (", 1)
 
     def convert_endmodule(self, all_lines):
-        for i, line in enumerate(all_lines):
+        for i, line in enumerate(all_lines):       
             if "endmodule" in line:
                 all_lines[i] = all_lines[i].replace("endmodule", "end architecture arch_name;", 1)
 
@@ -138,13 +139,28 @@ class v2vhd:
                     line = line.rstrip()
                     all_lines[i] = line.replace("module", entity, 1) + " is\n"
 
+
     def convert_end(self, all_lines):
+        push_list = ["always", "if", "else", "elsif", "while", "repeat"]
         for i, line in enumerate(all_lines):
-            if "end" in line:
-                if ("if" in line) or ("else" in line):
-                    all_lines[i] = all_lines[i].replace("end", "end if;", 1)
-                elif ("always" in line):
-                    all_lines[i] = all_lines[i].replace("end", "end process;", 1)
+            
+            if "begin" in line:
+                if "always" in line:
+                    self.end_stack.append("process")
+                if " if " in line:
+                    self.end_stack.append("if")
+                if " else " in line and not ("posedge" in line):
+                    self.end_stack.append("if")
+                if " while " in line:
+                    self.end_stack.append("loop")
+                if " for " in line:
+                    self.end_stack.append("loop")
+                if " repeat " in line:
+                    self.end_stack.append("loop")
+                
+            if " end" in line and "posedge" not in line:
+                end_type = self.end_stack.pop()
+                all_lines[i] = all_lines[i].replace("end", "end " + end_type + ";", 1)
                     
     def convert_arch(self, all_lines):
         for i, line in enumerate(all_lines):
@@ -174,14 +190,14 @@ class v2vhd:
 
     def convert(self):
         self.convert_comments(self.lines)
+        self.convert_endmodule(self.lines)
+        self.convert_module(self.lines)
+        self.convert_end(self.lines)
         self.convert_always(self.lines)
         self.convert_begin(self.lines)
         self.convert_io(self.lines)
         self.convert_reg(self.lines)
         self.convert_parameter(self.lines)
-        self.convert_endmodule(self.lines)
-        self.convert_module(self.lines)
-        self.convert_end(self.lines)
         self.convert_arch(self.lines)
         self.convert_others(self.lines)
         self.convert_slice(self.lines)

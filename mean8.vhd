@@ -39,8 +39,7 @@ architecture arch_name of mean8 is
 
 begin -- architecture
 
-    process(clk, rst)
-    begin
+    process(clk, rst) begin
         if (rst) then
             -- Stage 2 of 4
             stage_01_000 <= (others => '0');
@@ -65,8 +64,8 @@ begin -- architecture
             -- Stage 4 of 4
             stage_03_000 <= stage_02_000 + stage_02_001;
             o_mean       <= stage_03_000 (WID+3 downto 3);
-        end if; -- else
-    end process; -- always
+        end if;
+    end process;
 end architecture arch_name;
 
 
