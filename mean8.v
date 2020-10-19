@@ -27,7 +27,6 @@ module mean8
     // Stage 4 of 4
     reg  [WID+2:0] stage_03_000;
 
-// begin module
 
     always@(posedge clk or posedge rst) begin
         if (rst) begin

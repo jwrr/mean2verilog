@@ -56,8 +56,6 @@ class v2vhd:
                     all_lines[i] = all_lines[i].replace("begin", "then", 1)
                 elif "else" in line:
                     all_lines[i] = all_lines[i].replace(" begin", "", 1)
-                elif "begin module" in line:
-                    all_lines[i] = "begin -- architecture\n"
 
     def convert_reg(self, all_lines):
         for i, line in enumerate(all_lines):
@@ -163,11 +161,17 @@ class v2vhd:
                 all_lines[i] = all_lines[i].replace("end", "end " + end_type + ";", 1)
                     
     def convert_arch(self, all_lines):
+        always_assign_cnt = 0
         for i, line in enumerate(all_lines):
             line = line.strip()
             if line == ");":
                 arch = ");\nend " + self.module_name + ";\n\narchitecture arch_name of " + self.module_name + " is"
                 all_lines[i] = all_lines[i].replace(");", arch, 1)
+            if "always" in line or "assign" in line:
+                if always_assign_cnt == 0:
+                    all_lines[i] = "begin -- architecture\n\n" + all_lines[i]
+                always_assign_cnt += 1
+                     
 
     def convert_others(self, all_lines):
         others = "(others => '0');"
@@ -192,13 +196,13 @@ class v2vhd:
         self.convert_comments(self.lines)
         self.convert_endmodule(self.lines)
         self.convert_module(self.lines)
+        self.convert_arch(self.lines)
         self.convert_end(self.lines)
         self.convert_always(self.lines)
         self.convert_begin(self.lines)
         self.convert_io(self.lines)
         self.convert_reg(self.lines)
         self.convert_parameter(self.lines)
-        self.convert_arch(self.lines)
         self.convert_others(self.lines)
         self.convert_slice(self.lines)
         

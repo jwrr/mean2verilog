@@ -271,7 +271,6 @@ module mean128
     // Stage 8 of 8
     reg  [WID+6:0] stage_07_000;
 
-// begin module
 
     always@(posedge clk or posedge rst) begin
         if (rst) begin

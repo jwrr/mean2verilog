@@ -37,6 +37,7 @@ architecture arch_name of mean8 is
     -- Stage 4 of 4
     signal stage_03_000 : unsigned(WID+2 downto 0);
 
+
 begin -- architecture
 
     process(clk, rst) begin

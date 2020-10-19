@@ -281,6 +281,7 @@ architecture arch_name of mean128 is
     -- Stage 8 of 8
     signal stage_07_000 : unsigned(WID+6 downto 0);
 
+
 begin -- architecture
 
     process(clk, rst) begin

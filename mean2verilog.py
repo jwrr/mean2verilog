@@ -48,7 +48,7 @@ class MeanTree:
                 verilog += "                reg  [WID{}{}:0] stage_{:02d}_{:03d};\n".format(op, w, stage, i)
         
 
-        verilog += "\n// begin module\n\n"
+        verilog += "\n\n"
         verilog += "                always@(posedge clk or posedge rst) begin\n"
         verilog += "                    if (rst) begin\n"
 
